@@ -1,0 +1,23 @@
+The idea was to test which way was the fastest if you want to have a whole
+file in memory.
+
+My initial intuition was that mmap() would be the fastest, but not necessarily by much.
+
+The other two canditates were fopen/fread and open/read. I later chose to only go with open/read to stay
+with syscalls.
+
+I tried with a 1.5GB file. The difference was so huge I resorted to use fstat in order to have only one call
+to read and one to write (thie write() call is not really necessary and my tests redirected stdout to /dev/null).
+
+The difference was again significant. 0.5s to read the whole 1.5GB file vs 0.003 with mmap.
+The open/read version used malloc (because having 1.5GB in a buffer on the stack wasn't possible), so I grew
+suspicious of the malloc and created a second program using mmap to get the memory via a syscall and then do
+the single read.
+
+The result was a little better, but not much, still roughly 0.450s between both.
+
+It turns out that the read() call is the real slowing factor. Without it (just allocating 1.5GB garbage and write it),
+both took the same time (0.003s). Thus, for a somewhat huge file, even in one time instead of chunks,
+read() is extremely slow.
+
+Thus, always use mmap if you can.
