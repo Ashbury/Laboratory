@@ -1,0 +1,25 @@
+For this experiment, I just wanted to do some benchmarking
+on diverse strcmp implementations.
+
+The idea came to me because I wanted to test a stupidly fun
+one-liner strcmp in terms of performance.
+
+The results are in the C file, and I want to share four conclusions.
+
+First, optimization flags are important. Without those, the compiler
+doesn't make the recursive one-liner tail-recursive, reducing drastically
+its performance.
+
+Second, do not use assembly to optimize, unless you know precisely what you
+are doing, because optimized C is often much faster.
+
+Third, bulk your data whenever possible to gain performance. Comparing bytes
+sixteen by sixteen is much faster than one by one.
+
+Fourth, use system implementations whenever possible, they are generally MUCH
+faster. Reinventing the wheel is often a good thing to learn, but if you want
+true performance, system implementations are often extremely polished and are
+almost always solid and standard complient.
+
+Finally, in doubt, benchmark it. You might be surprised (eg the difference
+between with and without variable for the classic_strcmp).
