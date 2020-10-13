@@ -1,0 +1,7 @@
+This experiment is there to test the true range we can explore
+on a pointer returned by the system's malloc both forward and backward.
+
+On OSX, I observed different range for reading and writing.
+
+On my machine, with Linux, both are equal to 134496 bytes when reading forward.
+When reading backward, both are equal to 673 bytes.
